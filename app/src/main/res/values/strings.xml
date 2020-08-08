@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyCalculator_v4</string>
+    <string name="switch_en">switch</string>
+    <string name="setting">Setting</string>
+    <string name="textViewSt">Настройка фона приложения</string>
+    <string name="textNameSt">12.png</string>
+    <string name="btnSt">Установить</string>
 </resources>

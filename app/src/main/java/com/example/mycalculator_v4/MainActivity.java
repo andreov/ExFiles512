@@ -2,17 +2,24 @@ package com.example.mycalculator_v4;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mResult;
     private double result;
     private String op;
     private boolean isUsual=true;
+    public static ImageView im;
+
 
 
     @Override
@@ -20,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mResult=findViewById(R.id.result);
+        im=findViewById(R.id.imageView);
         final View usual = findViewById(R.id.simpleCalc);
         final View unusual = findViewById(R.id.engineeringCalc);
         Button switchBtn = findViewById(R.id.btnSwitch);
@@ -37,16 +45,38 @@ public class MainActivity extends AppCompatActivity {
                     mResult=findViewById(R.id.result);
                     isUsual=true;
                 }
-
             }
-
         });
 
-        //if(isUsual) mResult=findViewById(R.id.result);
-        //else mResult=findViewById(R.id.result_en);
+        Button settingBtn=findViewById(R.id.btnSetting);
+        settingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
+    public static void LoadImg(String fileName){
+        //досупность хранилища
+        if(isExternalStorageReadable()){
+            //Получаем ссылку на файл
+            File pic= new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),fileName);
+            //Загружаем картинку
+            Bitmap bitmap= BitmapFactory.decodeFile(pic.getAbsolutePath());
+            im.setImageBitmap(bitmap);
 
+        }
 
+    }
+
+    public static boolean isExternalStorageReadable(){
+        String state=Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)){
+            return true;
+        }
+        return false;
     }
 
     public void onNumberClick(View view){
@@ -82,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
         switch(op) {
             case "+":
                 result = num1 + num2;
-                //mResult.setText("");
                 mResult.append(Double.toString(result));
                 break;
             case "-":
